@@ -23,27 +23,49 @@ playing = True
 
 
 class Card:
-    def __init__(self,suit,rank):
+
+    def __init__(self, suit, rank):
         self.suit = suit
         self.rank = rank
+
     def __str__(self):
         return f'{self.rank} {self.suit}'
-    
+
 
 class Deck:
-    
+
     def __init__(self):
         self.deck = []  # начинаем с пустого списка
         for suit in suits:
             for rank in ranks:
                 self.deck.append(f'{rank} {suit}')
-    
+
     def __str__(self):
         return f'{self.deck}'
 
     def shuffle(self):
         random.shuffle(self.deck)
-        
 
-test_deck = Deck()
-print(test_deck)
+    def deal(self):
+        single_card = self.deck.pop()
+        return single_card
+
+
+class Hand:
+
+    def __init__(self):
+        self.cards = [
+        ]  # начинаем с пустого списка, так же, как и в классе Deck
+        self.value = 0  # начинаем со значения 0
+        self.aces = 0  # добавляем атрибут, чтобы учитывать тузы
+
+    def add_card(self, card):
+        self.cards.append(card)
+        self.value += values[card.rank]
+        if card.rank == 'Туз':
+            self.aces += 1
+
+    def adjust_for_ace(self):
+        while self.value > 21 and self.aces:
+            self.value -= 10
+            self.aces -= 1
