@@ -24,6 +24,7 @@ playing = True
 
 
 class Card:
+    """Класс Карты """
 
     def __init__(self, suit, rank):
         self.suit = suit
@@ -34,6 +35,7 @@ class Card:
 
 
 class Deck:
+    """Карты в колоде"""
 
     def __init__(self):
         self.deck = []  # начинаем с пустого списка
@@ -56,6 +58,7 @@ class Deck:
 
 
 class Hand:
+    """Карты в руках дилера и игрока"""
 
     def __init__(self):
         self.cards = []
@@ -75,6 +78,7 @@ class Hand:
 
 
 class Chips:
+    """Класс фишек"""
 
     def __init__(self, total=100):
         self.total = total
@@ -88,6 +92,11 @@ class Chips:
 
 
 def take_bet(chips):
+    """Функция принятия ставки
+
+    Args:
+        chips (integer): Пытается принять ставку. Если ставка превышает баланс или введена некорректно, то повторяет ввод
+    """
     while True:
         try:
             print(f'Ваш баланс равен {chips.total} монет')
@@ -103,11 +112,23 @@ def take_bet(chips):
 
 
 def hit(deck, hand):
+    """Функция получения дополнительной карты, а также проверки на туза
+
+    Args:
+        deck (class Deck): Карты в колоде
+        hand (class Hand): Карты в руке игрока
+    """
     hand.add_card(deck.deal())
     hand.adjust_for_ace()
 
 
 def hit_or_stand(deck, hand):
+    """Функция получения дополнительной карты или оставление текущих
+
+    Args:
+        deck (class Deck): Карты в колоде
+        hand (class Hand): Карты в руке игрока
+    """
     global playing  # для контроля цикла while
 
     while True:
@@ -129,6 +150,12 @@ def hit_or_stand(deck, hand):
 
 
 def show_some(player, dealer):
+    """Функция показа карт в процессе игры. Одна из карт дилера скрыта.
+
+    Args:
+        player (class Hand): Карты в руке игрока
+        dealer (class Hand): Карты в руке дилера
+    """
     print("\nКарты Дилера:")
     print(" <карта скрыта>")
     print('', dealer.cards[1])
@@ -136,6 +163,12 @@ def show_some(player, dealer):
 
 
 def show_all(player, dealer):
+    """Функция показа всех карт в руках.
+
+    Args:
+        player (class Hand): Карты в руке игрока
+        dealer (class Hand): Карты в руке дилера
+    """
     print("\nКарты Дилера:", *dealer.cards, sep='\n ')
     print("Карты Дилера =", dealer.value)
     print("\nКарты Игрока:", *player.cards, sep='\n ')
