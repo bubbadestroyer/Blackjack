@@ -100,3 +100,8 @@ def take_bet(chips):
                 print(f'Ваша ставка превышает баланс, {chips.total}')
             else:
                 break
+
+
+def hit(deck, hand):
+    hand.add_card(deck.deal())
+    hand.adjust_for_ace()
