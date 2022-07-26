@@ -41,7 +41,10 @@ class Deck:
                 self.deck.append(f'{rank} {suit}')
 
     def __str__(self):
-        return f'{self.deck}'
+        deck = ""
+        for card in self.deck:
+            deck += card.__str__() + '\n'
+        return deck
 
     def shuffle(self):
         random.shuffle(self.deck)
@@ -69,3 +72,7 @@ class Hand:
         while self.value > 21 and self.aces:
             self.value -= 10
             self.aces -= 1
+
+
+test_deck = Deck()
+print(test_deck)
