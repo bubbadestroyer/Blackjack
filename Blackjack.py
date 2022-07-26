@@ -1,3 +1,4 @@
+from ast import While
 import random
 
 suits = ('Червы', 'Бубны', 'Пики', 'Трефы')
@@ -85,3 +86,17 @@ class Chips:
 
     def lose_bet(self):
         self.total -= self.bet
+
+
+def take_bet(chips):
+    while True:
+        try:
+            chips.bet = int(input('Введите вашу ставку: '))
+        except:
+            print('Ставка должна быть числом, повторите ввод')
+            continue
+        else:
+            if (chips.bet > chips.total):
+                print(f'Ваша ставка превышает баланс, {chips.total}')
+            else:
+                break
