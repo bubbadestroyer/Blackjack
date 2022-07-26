@@ -39,7 +39,7 @@ class Deck:
         self.deck = []  # начинаем с пустого списка
         for suit in suits:
             for rank in ranks:
-                self.deck.append(f'{rank} {suit}')
+                self.deck.append(Card(suit, rank))
 
     def __str__(self):
         deck = ""
@@ -58,10 +58,9 @@ class Deck:
 class Hand:
 
     def __init__(self):
-        self.cards = [
-        ]  # начинаем с пустого списка, так же, как и в классе Deck
-        self.value = 0  # начинаем со значения 0
-        self.aces = 0  # добавляем атрибут, чтобы учитывать тузы
+        self.cards = []
+        self.value = 0
+        self.aces = 0
 
     def add_card(self, card):
         self.cards.append(card)
@@ -91,6 +90,7 @@ class Chips:
 def take_bet(chips):
     while True:
         try:
+            print(f'Ваш баланс равен {chips.total} монет')
             chips.bet = int(input('Введите вашу ставку: '))
         except:
             print('Ставка должна быть числом, повторите ввод')
@@ -108,51 +108,117 @@ def hit(deck, hand):
 
 
 def hit_or_stand(deck, hand):
-    global playing
+    global playing  # для контроля цикла while
+
     while True:
         answer = input(
-            'Вы желаете взять дополнительную карту? Введите Y для согласия или N для того, чтобы остаться при своих картах.'
+            'Вы желаете взять дополнительную карту? Введите Y для согласия или N для того, чтобы остаться при своих картах. '
         )
+
         if answer.upper() == 'Y':
-            hit(deck, hand)
-        elif answer.upper == 'N':
+            hit(deck, hand)  # определённая выше функция hit()
+
+        elif answer.upper() == 'N':
+            print("Игрок остается при текущих картах. Ход дилера.")
             playing = False
-            print('Игрок остался при картах. Ход дилера')
+
         else:
-            print('Некорректный ввод')
+            print("Некорректный ввод.")
             continue
-        
-        
-def show_some(player,dealer):
+        break
+
+
+def show_some(player, dealer):
     print("\nКарты Дилера:")
     print(" <карта скрыта>")
-    print('',dealer.cards[1])  
+    print('', dealer.cards[1])
     print("\nКарты Игрока:", *player.cards, sep='\n ')
-    
-def show_all(player,dealer):
+
+
+def show_all(player, dealer):
     print("\nКарты Дилера:", *dealer.cards, sep='\n ')
-    print("Карты Дилера =",dealer.value)
+    print("Карты Дилера =", dealer.value)
     print("\nКарты Игрока:", *player.cards, sep='\n ')
-    print("Карты Игрока =",player.value)
-    
-    
-def player_busts(player,dealer,chips):
+    print("Карты Игрока =", player.value)
+
+
+def player_busts(chips):
     print("Игрок превысил 21!")
     chips.lose_bet()
 
-def player_wins(player,dealer,chips):
+
+def player_wins(chips):
     print("Игрок выиграл!")
     chips.win_bet()
 
-def dealer_busts(player,dealer,chips):
+
+def dealer_busts(chips):
     print("Дилер превысил 21!")
     chips.win_bet()
-    
-def dealer_wins(player,dealer,chips):
+
+
+def dealer_wins(chips):
     print("Дилер выиграл!")
     chips.lose_bet()
-    
-def draw(player,dealer):
+
+
+def draw():
     print("Ничья!.")
-    
-    
+
+
+while True:
+    deck = Deck()
+    deck.shuffle()
+
+    player_hand = Hand()
+    player_hand.add_card(deck.deal())
+    player_hand.add_card(deck.deal())
+
+    dealer_hand = Hand()
+    dealer_hand.add_card(deck.deal())
+    dealer_hand.add_card(deck.deal())
+
+    player_chips = Chips()
+
+    take_bet(player_chips)
+
+    show_some(player_hand, dealer_hand)
+
+    while playing:
+
+        hit_or_stand(deck, player_hand)
+
+        show_some(player_hand, dealer_hand)
+
+        if player_hand.value > 21:
+            player_busts(player_chips)
+            show_all(player_hand, dealer_hand)
+            break
+
+    if player_hand.value <= 21:
+
+        while dealer_hand.value < 17:
+            hit(deck, dealer_hand)
+
+        show_all(player_hand, dealer_hand)
+
+        if dealer_hand.value > 21:
+            dealer_busts(player_chips)
+
+        elif dealer_hand.value > player_hand.value:
+            dealer_wins(player_chips)
+
+        elif dealer_hand.value < player_hand.value:
+            player_wins(player_chips)
+
+        else:
+            draw()
+
+    print("\nСумма фишек Игрока - ", player_chips.total)
+
+    new_game = input("Хотите ли сыграть снова? Введите 'Y' или 'N' ")
+    if new_game[0].upper() == 'Y':
+        playing = True
+        continue
+    else:
+        break
