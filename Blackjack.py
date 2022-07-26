@@ -134,3 +134,25 @@ def show_all(player,dealer):
     print("Карты Дилера =",dealer.value)
     print("\nКарты Игрока:", *player.cards, sep='\n ')
     print("Карты Игрока =",player.value)
+    
+    
+def player_busts(player,dealer,chips):
+    print("Игрок превысил 21!")
+    chips.lose_bet()
+
+def player_wins(player,dealer,chips):
+    print("Игрок выиграл!")
+    chips.win_bet()
+
+def dealer_busts(player,dealer,chips):
+    print("Дилер превысил 21!")
+    chips.win_bet()
+    
+def dealer_wins(player,dealer,chips):
+    print("Дилер выиграл!")
+    chips.lose_bet()
+    
+def draw(player,dealer):
+    print("Ничья!.")
+    
+    
