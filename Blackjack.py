@@ -105,3 +105,19 @@ def take_bet(chips):
 def hit(deck, hand):
     hand.add_card(deck.deal())
     hand.adjust_for_ace()
+
+
+def hit_or_stand(deck, hand):
+    global playing
+    while True:
+        answer = input(
+            'Вы желаете взять дополнительную карту? Введите Y для согласия или N для того, чтобы остаться при своих картах.'
+        )
+        if answer.upper() == 'Y':
+            hit(deck, hand)
+        elif answer.upper == 'N':
+            playing = False
+            print('Игрок остался при картах. Ход дилера')
+        else:
+            print('Некорректный ввод')
+            continue
