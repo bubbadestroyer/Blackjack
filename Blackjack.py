@@ -121,3 +121,16 @@ def hit_or_stand(deck, hand):
         else:
             print('Некорректный ввод')
             continue
+        
+        
+def show_some(player,dealer):
+    print("\nКарты Дилера:")
+    print(" <карта скрыта>")
+    print('',dealer.cards[1])  
+    print("\nКарты Игрока:", *player.cards, sep='\n ')
+    
+def show_all(player,dealer):
+    print("\nКарты Дилера:", *dealer.cards, sep='\n ')
+    print("Карты Дилера =",dealer.value)
+    print("\nКарты Игрока:", *player.cards, sep='\n ')
+    print("Карты Игрока =",player.value)
